@@ -59,12 +59,23 @@ __device__ float
 sobel_filtered_pixel(float *s, int i, int j , int ncols, int nrows, float *gx, float *gy)
 {
 
-   float t=0.0;
+   float Gx = 0.0f;
+   float Gy = 0.0f;
 
-   // ADD CODE HERE:  add your code here for computing the sobel stencil computation at location (i,j)
+   // ADD CODE HERE: add your code here for computing the sobel stencil computation at location (i,j)
    // of input s, returning a float
+   if (i > 0 && i < nrows - 1 && j > 0 && j < ncols - 1){
+      for (int k = 0; k < 3; k++){
+         for (int l = 0; l < 3; l++){
+            int currentRow = (i+k-1)*ncols;
+            int currentCol = j+l-1;
+            Gx += gx[k*3+l] * s[currentRow + currentCol];
+            Gy += gy[k*3+l] * s[currentRow + currentCol];
+         }
+      }
+   }
 
-   return t;
+   return sqrt(Gx*Gx + Gy*Gy);
 }
 
 //
@@ -95,6 +106,15 @@ sobel_kernel_gpu(float *s,  // source image pixels
 
    // because this is CUDA, you need to use CUDA built-in variables to compute an index and stride
    // your processing motif will be very similar here to that we used for vector add in Lab #2
+
+   int index = blockIdx.x * blockDim.x + threadIdx.x;
+   int stride = blockDim.x * gridDim.x;
+   for (int a = index; a < n; a += stride) {
+      int i = a / ncols;
+      int j = a % ncols;
+      out[a] = sobel_filtered_pixel(in, i, j, ncols, nrows, Gx, Gy);
+   }
+
 }
 
 int
@@ -155,9 +175,21 @@ main (int ac, char *av[])
 
    // set up to run the kernel
    int nBlocks=1, nThreadsPerBlock=256;
+   int c = 0;
 
    // ADD CODE HERE: insert your code here to set a different number of thread blocks or # of threads per block
-
+   while ( (c = getopt(ac, av, "N:B:")) != -1) {
+      switch(c) {
+         case 'N':
+            nThreadsPerBlock = std::atoi(optarg == NULL ? "-999" : optarg);
+            // std::cout << "Command line nThreadsPerBlock: " << nThreadsPerBlock << std::endl;
+            break;
+         case 'B':
+            nBlocks = std::atoi(optarg == NULL ? "-999" : optarg);
+            // std::cout << "Command line nBlocks: " << nBlocks << std::endl;
+            break;
+      }
+   }
 
 
    printf(" GPU configuration: %d blocks, %d threads per block \n", nBlocks, nThreadsPerBlock);

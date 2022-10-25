@@ -54,8 +54,8 @@ sobel_filtered_pixel(float *s, int i, int j , int ncols, int nrows, float *gx, f
          for (int l = 0; l < 3; l++){
             int currentRow = (i+k-1)*ncols;
             int currentCol = j+l-1;
-            Gx += gx[k*3+l] * s[currentCol + currentRow];
-            Gy += gy[k*3+l] * s[currentCol + currentRow];
+            Gx += gx[k*3+l] * s[currentRow + currentCol];
+            Gy += gy[k*3+l] * s[currentRow + currentCol];
          }
       }
    }

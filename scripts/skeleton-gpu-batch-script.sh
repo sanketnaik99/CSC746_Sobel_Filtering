@@ -23,8 +23,7 @@ for N in 32 # loop over problem sizes
         do
         echo nvprof -m sm_efficiency ./sobel_gpu -N $N -B $B
         nvprof -m sm_efficiency ./sobel_gpu -N $N -B $B
-
+    done
+done
 echo nvprof -m sm_efficiency ./sobel_cpu_omp_offload
 nvprof -m sm_efficiency ./sobel_cpu_omp_offload
-
-

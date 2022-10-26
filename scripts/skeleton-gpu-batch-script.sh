@@ -30,5 +30,10 @@ for N in 32 64 128 256 512 1024 # loop over number of threads per block
         nvprof -m sm_efficiency ./sobel_gpu -N $N -B $B
     done
 done
+echo -e "\n\nStarted OpenMP with device offload run"
+echo -e "\nRUNTIME METRIC\n"
+echo nvprof ./sobel_cpu_omp_offload
+nvprof ./sobel_cpu_omp_offload
+echo -e "\nSM EFFICIENCY METRIC\n"
 echo nvprof -m sm_efficiency ./sobel_cpu_omp_offload
 nvprof -m sm_efficiency ./sobel_cpu_omp_offload

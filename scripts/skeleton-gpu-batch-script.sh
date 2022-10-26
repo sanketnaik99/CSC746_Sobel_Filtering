@@ -15,9 +15,11 @@ export LIBOMPTARGET_INFO=4
 # it is assumed your environment is set up properly for using the Cori GPUs
 # prior to you launching this batch script
 #
-for N in 32 64 128 256 512 1024 # loop over problem sizes
+# for N in 32 64 128 256 512 1024 # loop over problem sizes
+for N in 32 # loop over problem sizes
     do
-    for B in 1 4 16 64 256 1024 4096
+    # for B in 1 4 16 64 256 1024 4096
+    for B in 1 4
         do
         echo nvprof -m sm_efficiency ./sobel_gpu -N $N -B $B
         nvprof -m sm_efficiency ./sobel_gpu -N $N -B $B

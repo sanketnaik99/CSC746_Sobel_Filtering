@@ -21,7 +21,7 @@ for N in 32 64 128 256 512 1024 # loop over number of threads per block
     for B in 1 4 16 64 256 1024 4096 # loop over block sizes
     # for B in 1 4 # loop over block sizes
         do
-        echo -e "\n\nStarted new run for $N threads per block and $B block size\n"
+        echo -e "\n\nStarted new run for $N threads per block and $B number of blocks\n"
         echo -e "\nRUNTIME METRIC\n"
         echo nvprof ./sobel_gpu -N $N -B $B
         nvprof ./sobel_gpu -N $N -B $B

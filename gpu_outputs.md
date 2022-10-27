@@ -2060,6 +2060,59 @@ Invocations                               Metric Name                        Met
 Device "Tesla V100-SXM2-16GB (0)"
     Kernel: sobel_kernel_gpu(float*, float*, int, int, int, float*, float*)
           1                             sm_efficiency                   Multiprocessor Activity      98.22%      98.22%      98.22%
+
+==31452== NVPROF is profiling process 31452, command: ./sobel_cpu_omp_offload
+ Read data from the file ../data/zebra-gray-int8-4x 
+Libomptarget device 0 info: OpenMP Host-Device pointer mappings after block at unknown:0:0:
+Libomptarget device 0 info: Host Ptr           Target Ptr         Size (B) RefCount Declaration
+Libomptarget device 0 info: 0x00001555168c6010 0x00001554e8000000 146393408 1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x000015551f463010 0x00001554f2000000 146393408 1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbae8 0x00001554fac00200 4        1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbaec 0x00001554fac00000 4        1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbb00 0x00001554fac00600 36       1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbb30 0x00001554fac00400 36       1        unknown at unknown:0:0
+Libomptarget device 0 info: OpenMP Host-Device pointer mappings after block at unknown:0:0:
+Libomptarget device 0 info: Host Ptr           Target Ptr         Size (B) RefCount Declaration
+Libomptarget device 0 info: 0x00001555168c6010 0x00001554e8000000 146393408 1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x000015551f463010 0x00001554f2000000 146393408 1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbae8 0x00001554fac00200 4        1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbaec 0x00001554fac00000 4        1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbb00 0x00001554fac00600 36       1        unknown at unknown:0:0
+Libomptarget device 0 info: 0x00007fffffffbb30 0x00001554fac00400 36       1        unknown at unknown:0:0
+ Elapsed time is : 0.50905 
+ Wrote the output file ../data/processed-raw-int8-4x-cpu.dat 
+==31452== Profiling application: ./sobel_cpu_omp_offload
+==31452== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   55.96%  119.39ms         2  59.693ms  2.5920us  119.38ms  [CUDA memcpy DtoH]
+                   43.13%  92.002ms         6  15.334ms  1.3440us  62.207ms  [CUDA memcpy HtoD]
+                    0.91%  1.9492ms         1  1.9492ms  1.9492ms  1.9492ms  __omp_offloading_35_2a21e4f5__Z18do_sobel_filteringPfS_ii_l108
+      API calls:   48.90%  289.96ms         1  289.96ms  289.96ms  289.96ms  cuDevicePrimaryCtxRetain
+                   20.36%  120.70ms         1  120.70ms  120.70ms  120.70ms  cuMemcpyDtoHAsync
+                   15.62%  92.597ms         6  15.433ms  2.4570us  62.593ms  cuMemcpyHtoDAsync
+                   14.12%  83.734ms         1  83.734ms  83.734ms  83.734ms  cuDevicePrimaryCtxRelease
+                    0.37%  2.1756ms         3  725.20us  2.0030us  2.1255ms  cuStreamSynchronize
+                    0.21%  1.2260ms         6  204.33us  2.4410us  484.59us  cuMemAlloc
+                    0.15%  875.08us         2  437.54us  391.11us  483.97us  cuMemFree
+                    0.09%  532.01us        32  16.625us  1.4240us  249.21us  cuStreamCreate
+                    0.08%  469.17us         1  469.17us  469.17us  469.17us  cuModuleUnload
+                    0.06%  328.37us         1  328.37us  328.37us  328.37us  cuModuleLoadDataEx
+                    0.02%  103.23us        32  3.2250us  2.0470us  24.136us  cuStreamDestroy
+                    0.01%  88.039us         1  88.039us  88.039us  88.039us  cuMemcpyDtoH
+                    0.01%  48.871us         1  48.871us  48.871us  48.871us  cuLaunchKernel
+                    0.00%  12.306us         2  6.1530us     221ns  12.085us  cuCtxGetLimit
+                    0.00%  10.645us         1  10.645us  10.645us  10.645us  cuDevicePrimaryCtxGetState
+                    0.00%  9.0310us         1  9.0310us  9.0310us  9.0310us  cuCtxGetDevice
+                    0.00%  8.4490us         1  8.4490us  8.4490us  8.4490us  cuFuncGetAttribute
+                    0.00%  6.8200us         1  6.8200us  6.8200us  6.8200us  cuDeviceGetPCIBusId
+                    0.00%  6.0000us        21     285ns     114ns  1.0140us  cuCtxSetCurrent
+                    0.00%  4.6390us         6     773ns     142ns  2.5330us  cuDeviceGetAttribute
+                    0.00%  3.5040us         2  1.7520us     372ns  3.1320us  cuModuleGetGlobal
+                    0.00%  2.7590us         1  2.7590us  2.7590us  2.7590us  cuModuleGetFunction
+                    0.00%  1.9010us         2     950ns     559ns  1.3420us  cuDeviceGet
+                    0.00%  1.0520us         3     350ns     174ns     458ns  cuDeviceGetCount
+                    0.00%     481ns         1     481ns     481ns     481ns  cuDevicePrimaryCtxSetFlags
+
 nvprof -m sm_efficiency ./sobel_cpu_omp_offload
 ==19747== NVPROF is profiling process 19747, command: ./sobel_cpu_omp_offload
  Read data from the file ../data/zebra-gray-int8-4x 
